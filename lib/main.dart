@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterconnect/home_Screen.dart';
 import 'package:flutterconnect/views/login_Screen.dart';
 import 'package:flutterconnect/views/signup_Screen.dart';
 
@@ -31,6 +32,7 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
+
   runApp(const MyApp());
 }
 
@@ -50,8 +52,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/loginScreen': (context) => const LoginScreen(),
         '/signupScreen': (context) => const SignupScreen(),
+        '/homeScreen': (context) => const HomeScreen(),
       },
-      home: const SignupScreen(),
+      home: const LoginScreen(),
     );
   }
 }

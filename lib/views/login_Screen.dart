@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutterconnect/controller/authentication.dart';
 import 'package:flutterconnect/utils/colors.dart';
 import 'package:flutterconnect/widgets/app_Style.dart';
+import 'package:flutterconnect/widgets/snackbar_Message.dart';
 import 'package:flutterconnect/widgets/text_FieldInput.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +17,34 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
+  void logUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    String logIn = await Authentication().logInUser(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    if (logIn == 'success') {
+      Navigator.of(context).pushNamed('/homeScreen');
+      showSnackBarMessage(context, 'Logged In Successfully');
+      emailController.clear();
+      passwordController.clear();
+    }
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: isLoading ? null : logUser,
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(300, 50),
                       backgroundColor: const Color.fromARGB(255, 145, 144, 144),
@@ -79,10 +111,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    child: Text(
-                      'Login',
-                      style: appStyle(blackColor, FontWeight.bold, 20),
-                    ),
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            'Login',
+                            style: appStyle(blackColor, FontWeight.bold, 20),
+                          ),
                   ),
                   const SizedBox(
                     height: 10,

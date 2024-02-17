@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutterconnect/controller/authentication.dart';
 import 'package:flutterconnect/utils/colors.dart';
 import 'package:flutterconnect/widgets/app_Style.dart';
+import 'package:flutterconnect/widgets/snackbar_Message.dart';
 import 'package:flutterconnect/widgets/text_FieldInput.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +17,37 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
+  void signUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    String signIn = await Authentication().signInUser(
+      username: usernameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    if (signIn == 'success') {
+      Navigator.of(context).pushReplacementNamed('/loginScreen');
+      showSnackBarMessage(context, 'Signed up Successfully');
+      emailController.clear();
+      passwordController.clear();
+      usernameController.clear();
+    }
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: isLoading ? null : signUser,
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(300, 50),
                       backgroundColor: const Color.fromARGB(255, 145, 144, 144),
@@ -88,10 +121,16 @@ class _SignupScreenState extends State<SignupScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    child: Text(
-                      'Signup',
-                      style: appStyle(blackColor, FontWeight.bold, 20),
-                    ),
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            'Signup',
+                            style: appStyle(blackColor, FontWeight.bold, 20),
+                          ),
                   ),
                   const SizedBox(
                     height: 10,

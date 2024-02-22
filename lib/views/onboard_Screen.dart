@@ -131,10 +131,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     padding: const EdgeInsets.all(15.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) {
-                          return const LoginScreen();
-                        }));
+                        Navigator.of(context)
+                            .pushReplacementNamed('/loginScreen');
                       },
                       style: ElevatedButton.styleFrom(
                           fixedSize: const Size(300, 50),

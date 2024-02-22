@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterconnect/home_Screen.dart';
 import 'package:flutterconnect/views/login_Screen.dart';
+import 'package:flutterconnect/views/onboard_Screen.dart';
 import 'package:flutterconnect/views/signup_Screen.dart';
 
 void main() async {
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/signupScreen': (context) => const SignupScreen(),
         '/homeScreen': (context) => const HomeScreen(),
       },
-      home: const LoginScreen(),
+      home: const OnboardScreen(),
     );
   }
 }
